@@ -1,0 +1,61 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>ca.phon</groupId>
+    <artifactId>talkbank-ipa-fragments</artifactId>
+    <version>2.20.1</version>
+    <name>TalkBank IPA Fragments</name>
+    <description>Convert from ipa strings to xml and vice versa</description>
+
+    <repositories>
+        <repository>
+            <id>github-talkbank</id>
+            <url>https://maven.pkg.github.com/ghedlund/*</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>github-phon</id>
+            <url>https://maven.pkg.github.com/phon-ca/*</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub TalkBank Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/ghedlund/talkbank-ipa-fragments</url>
+        </repository>
+    </distributionManagement>
+
+    <properties>
+        <java.version>17</java.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.talkbank.chatter</groupId>
+            <artifactId>talkbank-xml-schema</artifactId>
+            <version>2.20.2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>ca.phon</groupId>
+            <artifactId>phon-ipa</artifactId>
+            <version>4.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+</project>
