@@ -28,7 +28,7 @@
         <repository>
             <id>github</id>
             <name>GitHub TalkBank Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/ghedlund/talkbank-ipa-fragments</url>
+            <url>https://maven.pkg.github.com/phon-ca/talkbank-ipa-fragments</url>
         </repository>
     </distributionManagement>
 
