@@ -22,6 +22,8 @@ public class XmlToIpaVisitor extends VisitorAdapter<Object> {
 
     @Visits
     public void visitPhog(PhoGroupType phog) {
+        if(builder.size() > 0 && !(builder.last() instanceof PhoneticGroupMarker pgm && pgm.getType() == PhoneticGroupMarkerType.BEGIN))
+            builder.appendWordBoundary();
         builder.appendPgStart();
         for(Object pwOrPause:phog.getPwOrPause()) {
             visit(pwOrPause);
