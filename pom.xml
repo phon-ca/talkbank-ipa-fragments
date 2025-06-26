@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ca.phon</groupId>
     <artifactId>talkbank-ipa-fragments</artifactId>
-    <version>3</version>
+    <version>4</version>
     <name>TalkBank IPA Fragments</name>
     <description>Convert from ipa strings to xml and vice versa</description>
 
@@ -48,7 +48,7 @@
         <dependency>
             <groupId>ca.phon</groupId>
             <artifactId>phon-ipa</artifactId>
-            <version>4.0.0-alpha.10</version>
+            <version>4.0.0-alpha.39</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
