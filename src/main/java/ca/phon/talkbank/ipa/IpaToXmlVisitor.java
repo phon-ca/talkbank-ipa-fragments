@@ -90,16 +90,16 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 
 	@Visits
 	public void visitCompoundPhone(CompoundPhone cmpPhone) {
-		final CompoundPhoneType CompoundPhoneType = factory.createCompoundPhoneType();
+		final CompoundPhoneType compoundPhoneType = factory.createCompoundPhoneType();
 		visit(cmpPhone.getFirstPhone());
 		final Object firstPhoneType = this.currentWord.getStressOrPhOrCmph().remove(this.currentWord.getStressOrPhOrCmph().size()-1);
 		visit(cmpPhone.getSecondPhone());
 		final Object secondPhoneType = this.currentWord.getStressOrPhOrCmph().remove(this.currentWord.getStressOrPhOrCmph().size()-1);
 
 		if(firstPhoneType instanceof PhoneType) {
-			CompoundPhoneType.getContent().add(factory.createPh(((PhoneType) firstPhoneType)));
+			compoundPhoneType.getContent().add(factory.createPh(((PhoneType) firstPhoneType)));
 		} else {
-			CompoundPhoneType.getContent().add(factory.createCmph(((CompoundPhoneType) firstPhoneType)));
+			compoundPhoneType.getContent().add(factory.createCmph(((CompoundPhoneType) firstPhoneType)));
 		}
 
 		LigatureTypeType ligType = switch (cmpPhone.getLigature()) {
@@ -109,10 +109,29 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 		};
 		final LigatureType lig = factory.createLigatureType();
 		lig.setType(ligType);
-		CompoundPhoneType.getContent().add(factory.createLig(lig));
+		compoundPhoneType.getContent().add(factory.createLig(lig));
 
-		CompoundPhoneType.getContent().add(factory.createPh(((PhoneType) secondPhoneType)));
-		this.currentWord.getStressOrPhOrCmph().add(CompoundPhoneType);
+		compoundPhoneType.getContent().add(factory.createPh(((PhoneType) secondPhoneType)));
+		this.currentWord.getStressOrPhOrCmph().add(compoundPhoneType);
+
+		if(cmpPhone.getScType() != SyllableConstituentType.UNKNOWN) {
+			org.talkbank.ns.talkbank.SyllableConstituentType scType = switch (cmpPhone.getScType()) {
+				case AMBISYLLABIC -> org.talkbank.ns.talkbank.SyllableConstituentType.AMBISYLLABIC;
+				case CODA -> org.talkbank.ns.talkbank.SyllableConstituentType.CODA;
+				case LEFTAPPENDIX -> org.talkbank.ns.talkbank.SyllableConstituentType.LEFT_APPENDIX;
+				case NUCLEUS -> org.talkbank.ns.talkbank.SyllableConstituentType.NUCLEUS;
+				case OEHS -> org.talkbank.ns.talkbank.SyllableConstituentType.OEHS;
+				case ONSET -> org.talkbank.ns.talkbank.SyllableConstituentType.ONSET;
+				case RIGHTAPPENDIX -> org.talkbank.ns.talkbank.SyllableConstituentType.RIGHT_APPENDIX;
+				case UNKNOWN, WORDBOUNDARYMARKER, SYLLABLESTRESSMARKER, SYLLABLEBOUNDARYMARKER -> null;
+			};
+			if(scType == org.talkbank.ns.talkbank.SyllableConstituentType.NUCLEUS) {
+				final SyllabificationInfo info = cmpPhone.getExtension(SyllabificationInfo.class);
+				if(info.isDiphthongMember())
+					scType = org.talkbank.ns.talkbank.SyllableConstituentType.DIPHTHONG;
+			}
+			compoundPhoneType.setScType(scType);
+		}
 	}
 
 	@Visits

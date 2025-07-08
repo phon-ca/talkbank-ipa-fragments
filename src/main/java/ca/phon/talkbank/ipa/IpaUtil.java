@@ -1,6 +1,7 @@
 package ca.phon.talkbank.ipa;
 
 import ca.phon.ipa.IPATranscript;
+import ca.phon.syllabifier.Syllabifier;
 import jakarta.xml.bind.JAXBElement;
 import org.talkbank.ns.talkbank.ObjectFactory;
 import org.talkbank.ns.talkbank.PhoneticTranscriptionType;
@@ -24,6 +25,19 @@ public class IpaUtil {
         final IPATranscript ipaTranscript = IPATranscript.parseIPATranscript(ipa);
         final IpaToXmlVisitor visitor = new IpaToXmlVisitor();
         ipaTranscript.accept(visitor);
+        return visitor.getPho();
+    }
+
+    /**
+     * Convert ipa transcript object into an xml fragment.
+     *
+     * @param ipa
+     * @return phonetic transcription JAXB type
+     * @throws java.text.ParseException if the ipa string is invalid
+     */
+    public static PhoneticTranscriptionType ipaToPhoneticTranscription(IPATranscript ipa) throws ParseException {
+        final IpaToXmlVisitor visitor = new IpaToXmlVisitor();
+        ipa.accept(visitor);
         return visitor.getPho();
     }
 
@@ -67,6 +81,19 @@ public class IpaUtil {
         final XmlToIpaVisitor visitor = new XmlToIpaVisitor();
         pho.getPwOrPauseOrPhog().forEach(visitor::visit);
         return visitor.toIPATranscript().toString();
+    }
+
+    /**
+     * Convert phonetic transcription to string ipa transcript object (including syllabification).
+     *
+     * @param pho
+     * @return ipa string
+     * @throws java.text.ParseException if the phonetic transcription is invalid
+     */
+    public static IPATranscript phoneticTranscriptionToIpaTranscript(PhoneticTranscriptionType pho) throws ParseException {
+        final XmlToIpaVisitor visitor = new XmlToIpaVisitor();
+        pho.getPwOrPauseOrPhog().forEach(visitor::visit);
+        return visitor.toIPATranscript();
     }
 
     /**

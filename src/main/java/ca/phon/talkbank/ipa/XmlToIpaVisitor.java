@@ -112,9 +112,9 @@ public class XmlToIpaVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
-    public void visitCompoundPhone(CompoundPhoneType CompoundPhoneType) {
+    public void visitCompoundPhone(CompoundPhoneType compoundPhoneType) {
         char ligCh = '\u0361';
-        for(JAXBElement<?> ele:CompoundPhoneType.getContent()) {
+        for(JAXBElement<?> ele:compoundPhoneType.getContent()) {
             if(!ele.getName().getLocalPart().equals("lig")) {
                 visit(ele.getValue());
             } else {
@@ -126,7 +126,24 @@ public class XmlToIpaVisitor extends VisitorAdapter<Object> {
                 };
             }
         }
+        SyllableConstituentType scType = SyllableConstituentType.UNKNOWN;
+        if(compoundPhoneType.getScType() != null) {
+            scType = switch (compoundPhoneType.getScType()) {
+                case AMBISYLLABIC -> SyllableConstituentType.AMBISYLLABIC;
+                case CODA -> SyllableConstituentType.CODA;
+                case DIPHTHONG, NUCLEUS -> SyllableConstituentType.NUCLEUS;
+                case LEFT_APPENDIX -> SyllableConstituentType.LEFTAPPENDIX;
+                case OEHS -> SyllableConstituentType.OEHS;
+                case ONSET -> SyllableConstituentType.ONSET;
+                case RIGHT_APPENDIX -> SyllableConstituentType.RIGHTAPPENDIX;
+            };
+        }
         builder.makeCompoundPhone(ligCh);
+        builder.last().setScType(scType);
+        if(compoundPhoneType.getScType() == org.talkbank.ns.talkbank.SyllableConstituentType.DIPHTHONG) {
+            final SyllabificationInfo syllabificationInfo = builder.last().getExtension(SyllabificationInfo.class);
+            syllabificationInfo.setDiphthongMember(true);
+        }
     }
 
     @Visits
